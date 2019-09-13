@@ -118,11 +118,12 @@ def combine_masks(processed_folder):
 def get_im_data(base_path):
     folds = glob.glob(os.path.join(base_path, '*', '*'))
     indicator_dict = dict()
-    
+    print(folds)
     is_val = lambda x: x.find('validation') != -1
     
     for f in folds:
         files = glob.glob(os.path.join(f, '*','*.png'))
+        print(f, len(files))
         if len(files) == 0:
             indicator_dict[f] = (False, is_val(f))
         else:
@@ -138,8 +139,9 @@ if __name__ == '__main__':
 
     out_val_dir = os.path.join(proc_data, 'validation')
     out_train_dir = os.path.join(proc_data, 'train')
-
+    print(indicator_dict)
     for e, i in enumerate(indicator_dict.items()):
+        print(e, i)
         # no data in the folder so skip it
         if not i[1][0]:
             continue
@@ -152,7 +154,6 @@ if __name__ == '__main__':
         else:
              move_png_to_jpeg(i[0], out_train_dir, e)
              move_labels(i[0], out_train_dir, e)
-
 
     combine_masks(out_val_dir)
     combine_masks(out_train_dir)
